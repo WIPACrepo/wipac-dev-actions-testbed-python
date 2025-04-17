@@ -64,6 +64,7 @@ def main(
 
 
 if __name__ == "__main__":
+    logging.basicConfig(level=logging.DEBUG)
     main(
         tag=os.environ["LATEST_SEMVER_TAG_NO_V"],
         changed_files=os.environ["CHANGED_FILES"].splitlines(),
