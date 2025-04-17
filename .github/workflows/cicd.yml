@@ -103,13 +103,14 @@ jobs:
               exit 1
           fi
           #
-          if ! grep -q '[tool.setuptools_scm]' pyproject.toml; then
+          if ! grep -Eq '^\[tool\.setuptools_scm\]' pyproject.toml; then
               echo "::error::[tool.setuptools_scm] not found in pyproject.toml — aborting"
               exit 1
           fi
 
           echo "setuptools-scm is configured properly."
 
+          # tell SCM to use our version instead of detecting it 
           SETUPTOOLS_SCM_PRETEND_VERSION=${{ steps.version.outputs.version }} python -m build
 
       - name: Create GitHub Release via API
