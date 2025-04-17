@@ -84,9 +84,9 @@ jobs:
           echo "now: $(date -u +"%Y-%m-%dT%H:%M:%S.%3N")"
           
           python -m pip install --upgrade pip
-          pip install build twine setuptools setuptools-scm
+          pip install build setuptools setuptools-scm
 
-      - name: Build package
+      - name: Build package (eventually, this will be 'WIPACrepo/wipac-dev-py-build-action')
         if: steps.version.outputs.version != ''
         run: |
           set -euo pipefail
@@ -108,12 +108,12 @@ jobs:
               exit 1
           fi
 
-          echo "setuptools-scm is configured properly."
+          # build (tell SCM to use our version instead of detecting it) 
+          SETUPTOOLS_SCM_PRETEND_VERSION=${{ steps.version.outputs.version }} \
+              SETUPTOOLS_SCM_DEBUG=1 \
+              python -m build
 
-          # tell SCM to use our version instead of detecting it 
-          SETUPTOOLS_SCM_PRETEND_VERSION=${{ steps.version.outputs.version }} python -m build
-
-      - name: Create GitHub Release via API
+      - name: Create GitHub Release via API (may be replaced by a GHA package)
         if: steps.version.outputs.version != ''
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -121,8 +121,6 @@ jobs:
         run: |
           set -euo pipefail
           echo "now: $(date -u +"%Y-%m-%dT%H:%M:%S.%3N")"
-          
-          exit 1 # TODO: REMOVE
           
           API_URL="https://api.github.com/repos/${{ github.repository }}/releases"
           TAG="v${VERSION}"
@@ -136,7 +134,7 @@ jobs:
               -H "Content-Type: application/json" \
               -d "$PAYLOAD" "$API_URL"
 
-      - name: Upload to PyPI
+      - name: Upload to PyPI (so simple, no GHA package needed)
         if: steps.version.outputs.version != ''
         env:
           TWINE_USERNAME: __token__
@@ -144,4 +142,5 @@ jobs:
         run: |
           set -euo pipefail
           echo "now: $(date -u +"%Y-%m-%dT%H:%M:%S.%3N")"
+          pip install twine
           twine upload dist/*
