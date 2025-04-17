@@ -1,6 +1,7 @@
 """A script for determining the next version of a package."""
 
 import enum
+import logging
 import os
 import sys
 from fnmatch import fnmatch
@@ -20,6 +21,11 @@ def main(
     force_patch: bool,
 ) -> None:
     """Print the next version of a package; if there's no print, then's no new version."""
+    logging.info(f"{tag=}")
+    logging.info(f"{changed_files=}")
+    logging.info(f"{commit_log=}")
+    logging.info(f"{ignore_patterns=}")
+    logging.info(f"{force_patch=}")
 
     # is a release needed?
     if not changed_files:
