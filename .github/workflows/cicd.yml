@@ -93,16 +93,16 @@ jobs:
           echo "now: $(date -u +"%Y-%m-%dT%H:%M:%S.%3N")"
           # Validate setuptools-scm usage
           if ! grep -q 'setuptools-scm' pyproject.toml; then
-              echo "❌ setuptools-scm not found in pyproject.toml — aborting"
+              echo "::error::setuptools-scm not found in pyproject.toml — aborting"
               exit 1
           fi
 
           if grep -A 5 '^\[project\]' pyproject.toml | grep -q '^version\s*='; then
-              echo "❌ [project] version is explicitly set — must be managed by setuptools-scm"
+              echo "::error::[project] version is explicitly set — must be managed by setuptools-scm"
               exit 1
           fi
 
-          echo "✅ setuptools-scm is configured properly"
+          echo "setuptools-scm is configured properly."
 
           SETUPTOOLS_SCM_PRETEND_VERSION=${{ steps.version.outputs.version }} python -m build
 
