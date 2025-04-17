@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     concurrency: release
     env:
-      FORCE_PATCH_IF_NO_COMMIT_TOKEN: false
+      FORCE_PATCH_IF_NO_COMMIT_TOKEN: true
       IGNORE_PATHS: |
         resources/**
         assets/**
