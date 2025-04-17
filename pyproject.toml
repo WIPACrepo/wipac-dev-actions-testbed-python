@@ -3,7 +3,6 @@ requires = ["setuptools>=78.1", "setuptools-scm"]
 build-backend = "setuptools.build_meta"
 
 [project]
-version = "1.2.100"
 dependencies = ["htchirp", "htcondor", "oms-mqclient", "numpy"]
 name = "wipac-dev-next-version-action-testbed"
 keywords = []
