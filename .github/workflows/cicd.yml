@@ -1,0 +1,132 @@
+name: release
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    concurrency: release
+    env:
+      FORCE_PATCH_IF_NO_COMMIT_TOKEN: false
+      IGNORE_PATHS: |
+        resources/**
+        assets/**
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Compute bumped version
+        id: version
+        env:
+          FORCE_PATCH_IF_NO_COMMIT_TOKEN: ${{ env.FORCE_PATCH_IF_NO_COMMIT_TOKEN }}
+          IGNORE_PATHS: ${{ env.IGNORE_PATHS }}
+        run: |
+          set -euo pipefail
+          echo "now: $(date -u +"%Y-%m-%dT%H:%M:%S.%3N")"
+
+          # get the latest semantic-version style tag
+          _latest_semver_tag=$(git tag --sort=-creatordate | grep -E '^v?[0-9]+\.[0-9]+\.[0-9]+$' | head -n1 || true)
+          echo "Latest semantic-version style tag: $_latest_semver_tag"
+          if [ -z "$_latest_semver_tag" ]; then
+              echo "No previous semver tag found — using 0.0.0"
+              echo "version=0.0.0" >> "$GITHUB_OUTPUT"
+              exit 0
+          else
+              LATEST_SEMVER_TAG_NO_V="${_latest_semver_tag#v}"
+          fi
+
+          # get info on what's changed since that tag
+          _that_commit=$(git rev-list -n 1 "$_latest_semver_tag")
+          echo "Looking at what's changed since $_latest_semver_tag / $_that_commit"
+          #
+          CHANGED_FILES=$(git diff --name-only "$_that_commit"..HEAD)
+          echo "Changed files:"
+          echo "$CHANGED_FILES"
+          #
+          COMMIT_LOG=$(git log "$_that_commit"..HEAD --pretty=%B)
+          echo "Commit log(s) since then:"
+          echo "$COMMIT_LOG"
+
+          # get next version
+          export LATEST_SEMVER_TAG_NO_V 
+          export CHANGED_FILES
+          export COMMIT_LOG
+          VERSION=$(python compute_next_version.py)
+
+          # handle output
+          if [ -z "$VERSION" ]; then
+              echo "No release needed — skipping"
+              echo "version=" >> "$GITHUB_OUTPUT"
+          else
+              echo "Bumped version: $VERSION"
+              echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Install build tools
+        if: steps.version.outputs.version != ''
+        run: |
+          set -euo pipefail
+          echo "now: $(date -u +"%Y-%m-%dT%H:%M:%S.%3N")"
+          
+          exit 1  # TODO: REMOVE
+          
+          python -m pip install --upgrade pip
+          pip install build twine setuptools setuptools-scm
+
+      - name: Build package
+        if: steps.version.outputs.version != ''
+        run: |
+          set -euo pipefail
+          echo "now: $(date -u +"%Y-%m-%dT%H:%M:%S.%3N")"
+          # Validate setuptools-scm usage
+          if ! grep -q 'setuptools-scm' pyproject.toml; then
+              echo "❌ setuptools-scm not found in pyproject.toml — aborting"
+              exit 1
+          fi
+
+          if grep -A 5 '^\[project\]' pyproject.toml | grep -q '^version\s*='; then
+              echo "❌ [project] version is explicitly set — must be managed by setuptools-scm"
+              exit 1
+          fi
+
+          echo "✅ setuptools-scm is configured properly"
+
+          SETUPTOOLS_SCM_PRETEND_VERSION=${{ steps.version.outputs.version }} python -m build
+
+      - name: Create GitHub Release via API
+        if: steps.version.outputs.version != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ steps.version.outputs.version }}
+        run: |
+          set -euo pipefail
+          echo "now: $(date -u +"%Y-%m-%dT%H:%M:%S.%3N")"
+          API_URL="https://api.github.com/repos/${{ github.repository }}/releases"
+          TAG="release-${VERSION}"
+          PAYLOAD=$(jq -n \
+              --arg tag_name "$TAG" \
+              --arg target_commitish "${{ github.sha }}" \
+              --arg name "Release $VERSION" \
+              --arg body "Automated release for commit ${{ github.sha }}" \
+              '{ tag_name: $tag_name, target_commitish: $target_commitish, name: $name, body: $body, draft: false, prerelease: false }')
+          curl -sSf -X POST -H "Authorization: Bearer $GH_TOKEN" \
+              -H "Content-Type: application/json" \
+              -d "$PAYLOAD" "$API_URL"
+
+      - name: Upload to PyPI
+        if: steps.version.outputs.version != ''
+        env:
+          TWINE_USERNAME: __token__
+          TWINE_PASSWORD: ${{ secrets.PYPI_TOKEN }}
+        run: |
+          set -euo pipefail
+          echo "now: $(date -u +"%Y-%m-%dT%H:%M:%S.%3N")"
+          twine upload dist/*
