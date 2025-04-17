@@ -3,7 +3,6 @@
 import enum
 import logging
 import os
-import sys
 from fnmatch import fnmatch
 
 
@@ -29,9 +28,9 @@ def main(
 
     # is a release needed?
     if not changed_files:
-        return print("No changes detected", file=sys.stderr)
+        return logging.info("No changes detected")
     if all(any(fnmatch(f, pat) for pat in ignore_patterns) for f in changed_files):
-        return print("None of the changed files require a release.", file=sys.stderr)
+        return logging.info("None of the changed files require a release.")
 
     # detect bump
     if "[major]" in commit_log:
@@ -43,7 +42,7 @@ def main(
     elif force_patch:
         bump = BumpType.PATCH
     else:
-        return print("Commit log doesn't signify a version bump.", file=sys.stderr)
+        return logging.info("Commit log doesn't signify a version bump.")
 
     # increment
     major, minor, patch = map(int, tag.split("."))
@@ -57,7 +56,7 @@ def main(
         case BumpType.PATCH:
             patch += 1
         case _:
-            return print(f"Bump type not supported: {bump}", file=sys.stderr)
+            raise ValueError(f"Bump type not supported: {bump}")
 
     # print the next version
     print(f"{major}.{minor}.{patch}")
