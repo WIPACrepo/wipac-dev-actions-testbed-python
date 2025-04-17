@@ -127,7 +127,7 @@ jobs:
           PAYLOAD=$(jq -n \
               --arg tag_name "$TAG" \
               --arg target_commitish "${{ github.sha }}" \
-              --arg name "Release $VERSION" \
+              --arg name "$TAG" \
               --arg body "Automated release for commit ${{ github.sha }}" \
               '{ tag_name: $tag_name, target_commitish: $target_commitish, name: $name, body: $body, draft: false, prerelease: false }')
           curl -sSf -X POST -H "Authorization: Bearer $GH_TOKEN" \
