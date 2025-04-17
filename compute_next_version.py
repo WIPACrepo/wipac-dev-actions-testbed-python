@@ -18,14 +18,14 @@ def main(
     commit_log: str,
     ignore_patterns: list[str],
     force_patch: bool,
-):
+) -> None:
     """Print the next version of a package; if there's no print, then's no new version."""
 
     # is a release needed?
     if not changed_files:
-        raise ValueError("No changes detected")
+        return print("No changes detected", file=sys.stderr)
     if all(any(fnmatch(f, pat) for pat in ignore_patterns) for f in changed_files):
-        raise ValueError("None of the changed files require a release.")
+        return print("None of the changed files require a release.", file=sys.stderr)
 
     # detect bump
     if "[major]" in commit_log:
@@ -37,7 +37,7 @@ def main(
     elif force_patch:
         bump = BumpType.PATCH
     else:
-        return sys.exit(0)  # no release needed!
+        return print("Commit log doesn't signify a version bump.", file=sys.stderr)
 
     # increment
     major, minor, patch = map(int, tag.split("."))
@@ -51,7 +51,7 @@ def main(
         case BumpType.PATCH:
             patch += 1
         case _:
-            raise ValueError(f"Bump type not supported: {bump}")
+            return print(f"Bump type not supported: {bump}", file=sys.stderr)
 
     # print the next version
     print(f"{major}.{minor}.{patch}")
