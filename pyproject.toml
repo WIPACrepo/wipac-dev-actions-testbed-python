@@ -25,3 +25,5 @@ file = "LICENSE"
 [tool.setuptools.packages.find]
 namespaces = false
 exclude = ["test", "tests", "doc", "docs", "resource", "resources", "example", "examples"]
+
+[tool.setuptools_scm]
