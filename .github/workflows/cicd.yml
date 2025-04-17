@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     concurrency: release
     env:
-      FORCE_PATCH_IF_NO_COMMIT_TOKEN: true
+      FORCE_PATCH_IF_NO_COMMIT_TOKEN: false
       IGNORE_PATHS: |
         resources/**
         assets/**
@@ -21,7 +21,7 @@ jobs:
 
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.13'  # update, someday
 
       - name: Compute bumped version
         id: version
@@ -66,6 +66,7 @@ jobs:
 
           # get next version
           VERSION=$(python compute_next_version.py)
+          echo
 
           # handle output
           if [ -z "$VERSION" ]; then
