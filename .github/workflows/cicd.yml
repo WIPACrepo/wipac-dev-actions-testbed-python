@@ -97,9 +97,14 @@ jobs:
               echo "::error::setuptools-scm not found in pyproject.toml — aborting"
               exit 1
           fi
-
+          #
           if grep -A 5 '^\[project\]' pyproject.toml | grep -q '^version\s*='; then
               echo "::error::[project] version is explicitly set — must be managed by setuptools-scm"
+              exit 1
+          fi
+          #
+          if ! grep -q '[tool.setuptools_scm]' pyproject.toml; then
+              echo "::error::[tool.setuptools_scm] not found in pyproject.toml — aborting"
               exit 1
           fi
 
