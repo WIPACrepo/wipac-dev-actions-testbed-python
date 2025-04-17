@@ -23,7 +23,7 @@ jobs:
         with:
           python-version: '3.13'  # update, someday
 
-      - name: Compute bumped version
+      - name: Compute bumped version (eventually, this will be 'WIPACrepo/wipac-dev-next-version-action')
         id: version
         env:
           FORCE_PATCH_IF_NO_COMMIT_TOKEN: ${{ env.FORCE_PATCH_IF_NO_COMMIT_TOKEN }}
@@ -91,6 +91,7 @@ jobs:
         run: |
           set -euo pipefail
           echo "now: $(date -u +"%Y-%m-%dT%H:%M:%S.%3N")"
+          
           # Validate setuptools-scm usage
           if ! grep -q 'setuptools-scm' pyproject.toml; then
               echo "::error::setuptools-scm not found in pyproject.toml — aborting"
@@ -114,8 +115,11 @@ jobs:
         run: |
           set -euo pipefail
           echo "now: $(date -u +"%Y-%m-%dT%H:%M:%S.%3N")"
+          
+          exit 1 # TODO: REMOVE
+          
           API_URL="https://api.github.com/repos/${{ github.repository }}/releases"
-          TAG="release-${VERSION}"
+          TAG="v${VERSION}"
           PAYLOAD=$(jq -n \
               --arg tag_name "$TAG" \
               --arg target_commitish "${{ github.sha }}" \
