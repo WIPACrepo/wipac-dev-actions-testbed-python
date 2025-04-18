@@ -22,7 +22,7 @@ jobs:
         with:
           force-patch-if-no-commit-token: true
           ignore-paths: |
-            resources/**
+            resources/foo/**
             assets/**
             .github/**
 
