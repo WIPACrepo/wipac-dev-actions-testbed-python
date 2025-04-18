@@ -24,7 +24,7 @@ jobs:
             resources/foo/**
             assets/**
 
-      - uses: WIPACrepo/wipac-dev-py-build-action@v1.0
+      - uses: WIPACrepo/wipac-dev-py-build-action@main
         if: steps.next-version.outputs.version != ''
         with:
           version: ${{ steps.next-version.outputs.version }}
