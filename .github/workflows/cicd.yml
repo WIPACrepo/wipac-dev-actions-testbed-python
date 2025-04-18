@@ -23,7 +23,6 @@ jobs:
           ignore-paths: |
             resources/foo/**
             assets/**
-            .github/**
 
       - uses: WIPACrepo/wipac-dev-py-build-action@v1.0
         if: steps.next-version.outputs.version != ''
