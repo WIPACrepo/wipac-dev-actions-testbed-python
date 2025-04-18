@@ -13,10 +13,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.13'  # update, someday
-
       - uses: WIPACrepo/wipac-dev-next-version-action@v1.0
         id: next-version
         with:
@@ -26,7 +22,7 @@ jobs:
             assets/**
             .github/**
 
-      - uses: WIPACrepo/wipac-dev-py-build-action@main
+      - uses: WIPACrepo/wipac-dev-py-build-action@v1.0
         if: steps.next-version.outputs.version != ''
         with:
           version: ${{ steps.next-version.outputs.version }}
