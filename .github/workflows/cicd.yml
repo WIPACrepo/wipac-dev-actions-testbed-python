@@ -26,41 +26,10 @@ jobs:
             assets/**
             .github/**
 
-      - name: Install build tools
+      - uses: WIPACrepo/wipac-dev-py-build-action@main
         if: steps.next-version.outputs.version != ''
-        run: |
-          set -euo pipefail
-          echo "now: $(date -u +"%Y-%m-%dT%H:%M:%S.%3N")"
-          
-          python -m pip install --upgrade pip
-          pip install build setuptools setuptools-scm
-
-      - name: Build package (eventually, this will be 'WIPACrepo/wipac-dev-py-build-action')
-        if: steps.next-version.outputs.version != ''
-        run: |
-          set -euo pipefail
-          echo "now: $(date -u +"%Y-%m-%dT%H:%M:%S.%3N")"
-          
-          # Validate setuptools-scm usage
-          if ! grep -q 'setuptools-scm' pyproject.toml; then
-              echo "::error::setuptools-scm not found in pyproject.toml — aborting"
-              exit 1
-          fi
-          #
-          if grep -A 5 '^\[project\]' pyproject.toml | grep -q '^version\s*='; then
-              echo "::error::[project] version is explicitly set — must be managed by setuptools-scm"
-              exit 1
-          fi
-          #
-          if ! grep -Eq '^\[tool\.setuptools_scm\]' pyproject.toml; then
-              echo "::error::[tool.setuptools_scm] not found in pyproject.toml — aborting"
-              exit 1
-          fi
-
-          # build (tell SCM to use our version instead of detecting it) 
-          SETUPTOOLS_SCM_PRETEND_VERSION=${{ steps.next-version.outputs.version }} \
-              SETUPTOOLS_SCM_DEBUG=1 \
-              python -m build
+        with:
+          version: ${{ steps.next-version.outputs.version }}
 
       - name: Create GitHub Release via API (may be replaced by a GHA package)
         if: steps.next-version.outputs.version != ''
