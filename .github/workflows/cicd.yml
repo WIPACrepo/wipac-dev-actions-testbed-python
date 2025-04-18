@@ -11,11 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
-
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.13'  # update, someday
+          fetch-depth: 0  # required to see tags and commits
 
       - uses: WIPACrepo/wipac-dev-next-version-action@v1.0
         id: next-version
@@ -61,6 +57,7 @@ jobs:
               -d "$PAYLOAD" \
               "https://api.github.com/repos/${{ github.repository }}/releases"
 
+      - uses: actions/setup-python@v5
       - name: Upload to PyPI (so simple, no GHA package needed)
         if: steps.next-version.outputs.version != ''
         env:
