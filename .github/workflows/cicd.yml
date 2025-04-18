@@ -17,7 +17,7 @@ jobs:
         with:
           python-version: '3.13'  # update, someday
 
-      - uses: WIPACrepo/wipac-dev-next-version-action@main
+      - uses: WIPACrepo/wipac-dev-next-version-action@v1.0
         id: next-version
         with:
           force-patch-if-no-commit-token: true
