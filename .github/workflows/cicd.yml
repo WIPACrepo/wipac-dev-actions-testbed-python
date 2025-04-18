@@ -5,7 +5,18 @@ on:
     branches: [ main ]
 
 jobs:
+
+  py-versions:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.versions.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: versions
+        uses: WIPACrepo/wipac-dev-py-versions-action@v2.5
+
   release:
+    needs: [ py-versions ]
     runs-on: ubuntu-latest
     concurrency: release
     steps:
@@ -14,7 +25,7 @@ jobs:
           fetch-depth: 0  # required to see tags and commits
       - uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "${{ fromJSON(needs.py-versions.outputs.matrix)[0] }}"
 
       - uses: WIPACrepo/wipac-dev-next-version-action@v1.0
         id: next-version
