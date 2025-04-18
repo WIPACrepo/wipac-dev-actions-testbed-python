@@ -24,6 +24,7 @@ jobs:
           ignore-paths: |
             resources/**
             assets/**
+            .github/**
 
       - name: Install build tools
         if: steps.next-version.outputs.version != ''
