@@ -55,41 +55,41 @@ jobs:
   # PACKAGING
   ############################################################################
 
-  writable-branch-detect:
-    runs-on: ubuntu-latest
-    outputs:
-      OKAY: ${{ steps.detect.outputs.OKAY }}
-    steps:
-      - name: is this a bot-writable branch?
-        id: detect
-        # dependabot can't access normal secrets
-        #   & don't run non-branch triggers (like tags)
-        #   & we don't want to trigger an update on PR's merge to main/master/default (which is a branch)
-        run: |
-          set -euo pipefail
-          echo "now: $(date -u +"%Y-%m-%dT%H:%M:%S.%3N")"
-          if [[ \
-              ${{github.actor}} != 'dependabot[bot]' && \
-              ${{github.ref_type}} == 'branch' && \
-              ${{format('refs/heads/{0}', github.event.repository.default_branch)}} != ${{github.ref}} \
-          ]]; then
-            echo "OKAY=true" >> "$GITHUB_OUTPUT"
-            echo "yes, this branch is compatible"
-          else
-            echo "OKAY=false" >> "$GITHUB_OUTPUT"
-            echo "no, this branch is incompatible"
-          fi
+  #  writable-branch-detect:
+  #    runs-on: ubuntu-latest
+  #    outputs:
+  #      OKAY: ${{ steps.detect.outputs.OKAY }}
+  #    steps:
+  #      - name: is this a bot-writable branch?
+  #        id: detect
+  #        # dependabot can't access normal secrets
+  #        #   & don't run non-branch triggers (like tags)
+  #        #   & we don't want to trigger an update on PR's merge to main/master/default (which is a branch)
+  #        run: |
+  #          set -euo pipefail
+  #          echo "now: $(date -u +"%Y-%m-%dT%H:%M:%S.%3N")"
+  #          if [[ \
+  #              ${{github.actor}} != 'dependabot[bot]' && \
+  #              ${{github.ref_type}} == 'branch' && \
+  #              ${{format('refs/heads/{0}', github.event.repository.default_branch)}} != ${{github.ref}} \
+  #          ]]; then
+  #            echo "OKAY=true" >> "$GITHUB_OUTPUT"
+  #            echo "yes, this branch is compatible"
+  #          else
+  #            echo "OKAY=false" >> "$GITHUB_OUTPUT"
+  #            echo "no, this branch is incompatible"
+  #          fi
 
   py-setup:
-    needs: [ writable-branch-detect ]
+    #    needs: [ writable-branch-detect ]
     runs-on: ubuntu-latest
     steps:
-      - if: needs.writable-branch-detect.outputs.OKAY == 'true'
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        #        if: needs.writable-branch-detect.outputs.OKAY == 'true'
         with:
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-      - if: needs.writable-branch-detect.outputs.OKAY == 'true'
-        uses: WIPACrepo/wipac-dev-py-setup-action@v4.5
+      - uses: WIPACrepo/wipac-dev-py-setup-action@v4.5
+        #        if: needs.writable-branch-detect.outputs.OKAY == 'true'
         with:
           python_min: 3.12
           author: WIPAC Developers
@@ -98,15 +98,15 @@ jobs:
           auto_mypy_option: True
 
   py-dependencies:
-    needs: [ writable-branch-detect ]
+    #    needs: [ writable-branch-detect ]
     runs-on: ubuntu-latest
     steps:
-      - if: needs.writable-branch-detect.outputs.OKAY == 'true'
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        #        if: needs.writable-branch-detect.outputs.OKAY == 'true'
         with:
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-      - if: needs.writable-branch-detect.outputs.OKAY == 'true'
-        uses: WIPACrepo/wipac-dev-py-dependencies-action@v2.1
+      - uses: WIPACrepo/wipac-dev-py-dependencies-action@v2.1
+        #        if: needs.writable-branch-detect.outputs.OKAY == 'true'
         with:
           use_directory: true
 
