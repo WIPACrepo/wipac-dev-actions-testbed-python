@@ -145,9 +145,11 @@ jobs:
         with:
           force-patch-if-no-commit-token: true
           ignore-paths: |
-            resources/foo/**
-            assets/**
             .github/**
+            .gitignore
+            assets/**
+            dependencies-logs/**
+            resources/foo/**
 
       - uses: WIPACrepo/wipac-dev-py-build-action@main
         if: steps.next-version.outputs.version != ''
