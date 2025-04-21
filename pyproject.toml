@@ -23,11 +23,11 @@ classifiers = [
   'Programming Language :: Python :: 3.13'
 ]
 license-files = ["LICENSE"]
+license = "MIT"
 
 [[project.authors]]
 name = "WIPAC Developers"
 email = "developers@icecube.wisc.edu"
-license = "MIT"
 
 [project.urls]
 Homepage = "https://pypi.org/project/wipac-dev-actions-testbed/"
