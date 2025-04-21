@@ -22,7 +22,7 @@ zstd==1.5.6.7
 pipdeptree==2.26.1
 ├── packaging [required: >=24.1, installed: 25.0]
 └── pip [required: >=24.2, installed: 25.0.1]
-wipac-dev-next-version-action-testbed
+wipac-dev-actions-testbed
 ├── numpy [required: Any, installed: 2.2.5]
 └── oms-mqclient [required: Any, installed: 2.7.0]
     ├── wipac-dev-tools [required: Any, installed: 1.16.2]
