@@ -88,7 +88,7 @@ jobs:
         #        if: needs.writable-branch-detect.outputs.OKAY == 'true'
         with:
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-      - uses: WIPACrepo/wipac-dev-py-setup-action@v4.5
+      - uses: WIPACrepo/wipac-dev-py-setup-action@scm
         #        if: needs.writable-branch-detect.outputs.OKAY == 'true'
         with:
           python_min: 3.12
