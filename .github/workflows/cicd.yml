@@ -91,6 +91,7 @@ jobs:
       - uses: WIPACrepo/wipac-dev-py-setup-action@scm
         #        if: needs.writable-branch-detect.outputs.OKAY == 'true'
         with:
+          pypi_name: 'wipac-dev-actions-testbed'
           python_min: 3.12
           author: WIPAC Developers
           author_email: developers@icecube.wisc.edu
