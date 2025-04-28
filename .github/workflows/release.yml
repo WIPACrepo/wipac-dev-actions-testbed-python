@@ -31,12 +31,12 @@ jobs:
 
       - uses: WIPACrepo/wipac-dev-py-build-action@main
         with:
-          output-dir: disto/
+          output-dir: dist/
 
       - uses: actions/upload-artifact@v4
         with:
           name: dist
-          path: disto/
+          path: dist/
 
   github-release:
     needs: [ py-build ]
@@ -45,11 +45,11 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: dist
-          path: disto/
+          path: dist/
 
       - uses: softprops/action-gh-release@v2
         with:
-          files: disto/*
+          files: dist/*
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -61,7 +61,7 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: dist
-          path: disto/
+          path: dist/
 
       - uses: pypa/gh-action-pypi-publish@release/v1
         with:
