@@ -141,7 +141,7 @@ jobs:
           ref: ${{ github.sha }}  # in case 'ref' (arg default) has been updated since start
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}  # so a 'git push' can trigger workflows
 
-      - uses: WIPACrepo/wipac-dev-next-version-action@main
+      - uses: WIPACrepo/wipac-dev-next-version-action@v1.0
         id: next-version
         with:
           force-patch-if-no-commit-token: true
@@ -156,5 +156,5 @@ jobs:
         run: |
           set -euo pipefail
           echo "now: $(date -u +"%Y-%m-%dT%H:%M:%S.%3N")"
-          git tag v${{ steps.next-version.outputs.version }}
+          git tag v${{ steps.next-version.outputs.version }}  # note: prepend 'v'
           git push origin --tags

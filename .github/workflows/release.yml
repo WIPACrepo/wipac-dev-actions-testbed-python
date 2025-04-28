@@ -22,14 +22,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0
+          fetch-depth: 0  # required to see tags and commits
           ref: ${{ github.sha }}  # in case 'ref' (arg default) has been updated since start
 
       - uses: actions/setup-python@v5
         with:
           python-version: "${{ fromJSON(needs.py-versions.outputs.matrix)[0] }}"
 
-      - uses: WIPACrepo/wipac-dev-py-build-action@main
+      - uses: WIPACrepo/wipac-dev-py-build-action@v1.0
         # ^^^ creates dist/
 
       - name: Upload dist/ artifact
