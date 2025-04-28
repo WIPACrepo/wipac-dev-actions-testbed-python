@@ -141,10 +141,6 @@ jobs:
           ref: ${{ github.sha }}  # in case 'ref' (arg default) has been updated since start
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}  # so a 'git push' can trigger workflows
 
-      - uses: actions/setup-python@v5
-        with:
-          python-version: "${{ fromJSON(needs.py-versions.outputs.matrix)[0] }}"
-
       - uses: WIPACrepo/wipac-dev-next-version-action@main
         id: next-version
         with:
