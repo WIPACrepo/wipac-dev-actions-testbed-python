@@ -140,6 +140,7 @@ jobs:
           fetch-depth: 0  # required to see tags and commits
           ref: ${{ github.sha }}  # in case 'ref' (arg default) has been updated since start
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}  # so a new tag can trigger workflows
+
       - uses: actions/setup-python@v5
         with:
           python-version: "${{ fromJSON(needs.py-versions.outputs.matrix)[0] }}"
