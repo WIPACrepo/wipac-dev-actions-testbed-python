@@ -158,5 +158,5 @@ jobs:
         run: |
           set -euo pipefail
           echo "now: $(date -u +"%Y-%m-%dT%H:%M:%S.%3N")"
-          git tag ${{ steps.next-version.outputs.version }}
-          git push origin ${{ steps.next-version.outputs.version }}
+          git tag v${{ steps.next-version.outputs.version }}
+          git push origin --tags
