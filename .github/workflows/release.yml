@@ -30,9 +30,10 @@ jobs:
           python-version: "${{ fromJSON(needs.py-versions.outputs.matrix)[0] }}"
 
       - uses: WIPACrepo/wipac-dev-py-build-action@main
+        with:
+          output-dir: dist/
 
-      - name: Upload dist/ artifact
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
           name: dist
           path: dist/
@@ -41,8 +42,7 @@ jobs:
     needs: [ py-build ]
     runs-on: ubuntu-latest
     steps:
-      - name: Download dist/ artifact
-        uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v4
         with:
           name: dist
           path: dist/
@@ -58,8 +58,7 @@ jobs:
     needs: [ py-build ]
     runs-on: ubuntu-latest
     steps:
-      - name: Download dist/ artifact
-        uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v4
         with:
           name: dist
           path: dist/
