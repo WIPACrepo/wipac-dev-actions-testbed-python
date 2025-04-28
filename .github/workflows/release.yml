@@ -1,0 +1,46 @@
+name: release
+
+on:
+  push:
+    branches-ignore: [ '**' ]
+    tags: [ 'v*.*.*' ]
+
+jobs:
+
+  py-versions:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.versions.outputs.matrix }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: versions
+        uses: WIPACrepo/wipac-dev-py-versions-action@v2.5
+
+  release:
+    if: github.ref_type == 'tag'  # redundant b/c workflow's 'on'
+    needs: [ py-versions ]
+    runs-on: ubuntu-latest
+    concurrency: release  # prevent any possible race conditions
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # required to see tags and commits
+          ref: ${{ github.sha }}  # in case 'ref' (arg default) has been updated since start
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "${{ fromJSON(needs.py-versions.outputs.matrix)[0] }}"
+
+      - uses: WIPACrepo/wipac-dev-py-build-action@main
+
+      - uses: softprops/action-gh-release@v2
+        # uses 'github.ref_name' as associated tag
+        with:
+          files: dist/*
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          user: __token__
+          password: ${{ secrets.PYPI_TOKEN }}
