@@ -152,7 +152,7 @@ jobs:
         with:
           python-version: "${{ fromJSON(needs.py-versions.outputs.matrix)[0] }}"
 
-      - uses: WIPACrepo/wipac-dev-next-version-action@v1.1
+      - uses: WIPACrepo/wipac-dev-next-version-action@v1.2
         id: next-version
         with:
           force-patch-if-no-commit-token: true
