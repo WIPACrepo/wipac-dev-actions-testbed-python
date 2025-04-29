@@ -1,4 +1,4 @@
-name: CI/CD
+name: ci/cd
 
 on:
   push:
@@ -152,7 +152,7 @@ jobs:
         with:
           python-version: "${{ fromJSON(needs.py-versions.outputs.matrix)[0] }}"
 
-      - uses: WIPACrepo/wipac-dev-next-version-action@v1.0
+      - uses: WIPACrepo/wipac-dev-next-version-action@v1.1
         id: next-version
         with:
           force-patch-if-no-commit-token: true
@@ -171,13 +171,15 @@ jobs:
           git push origin --tags
 
       - if: steps.next-version.outputs.version != ''
-        uses: WIPACrepo/wipac-dev-py-build-action@v1.0  # creates dist/
+        uses: WIPACrepo/wipac-dev-py-build-action@v1.0
+        # -> uses the most recent git tag for versioning
+        # -> creates 'dist/' files
 
       - if: steps.next-version.outputs.version != ''
         uses: softprops/action-gh-release@v2
         with:
           files: dist/*
-          tag_name: v${{ steps.next-version.outputs.version }}  # note: prepend 'v'
+          tag_name: v${{ steps.next-version.outputs.version }}  # must match git tag above
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
