@@ -181,8 +181,6 @@ jobs:
           files: dist/*
           tag_name: v${{ steps.next-version.outputs.version }}  # must match git tag above
           generate_release_notes: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - if: steps.next-version.outputs.version != ''
         uses: pypa/gh-action-pypi-publish@release/v1
