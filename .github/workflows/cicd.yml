@@ -172,7 +172,7 @@ jobs:
 
       - if: steps.next-version.outputs.version != ''
         uses: WIPACrepo/wipac-dev-py-build-action@v1.0
-        # -> uses the most recent git tag for versioning
+        # -> uses the most recent git tag for versioning (aka the one made above)
         # -> creates 'dist/' files
 
       - if: steps.next-version.outputs.version != ''
