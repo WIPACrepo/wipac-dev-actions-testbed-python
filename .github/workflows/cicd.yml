@@ -96,7 +96,7 @@ jobs:
         with:
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           ref: ${{ github.sha }}  # lock to triggered commit ('github.ref' is dynamic)
-      - uses: WIPACrepo/wipac-dev-py-setup-action@scm
+      - uses: WIPACrepo/wipac-dev-py-setup-action@v5.0
         #        if: needs.writable-branch-detect.outputs.OKAY == 'true'
         with:
           pypi_name: 'wipac-dev-actions-testbed'
