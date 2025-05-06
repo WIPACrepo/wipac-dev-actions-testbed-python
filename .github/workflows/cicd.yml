@@ -95,7 +95,7 @@ jobs:
         #        if: needs.writable-branch-detect.outputs.OKAY == 'true'
         with:
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-          ref: ${{ github.sha }}  # lock to triggered commit ('github.ref' is dynamic)
+          ref: ${{ github.ref }}  # don't lock to 'sha' b/c action needs to push
       - uses: WIPACrepo/wipac-dev-py-setup-action@v5.0
         #        if: needs.writable-branch-detect.outputs.OKAY == 'true'
         with:
@@ -114,7 +114,7 @@ jobs:
         #        if: needs.writable-branch-detect.outputs.OKAY == 'true'
         with:
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-          ref: ${{ github.sha }}  # lock to triggered commit ('github.ref' is dynamic)
+          ref: ${{ github.ref }}  # don't lock to 'sha' b/c action needs to push
       - uses: WIPACrepo/wipac-dev-py-dependencies-action@v2.1
         #        if: needs.writable-branch-detect.outputs.OKAY == 'true'
         with:
