@@ -157,10 +157,11 @@ jobs:
         with:
           force-patch-if-no-commit-token: true
           ignore-paths: |
+            **/README.md
+            .github/**
             .gitignore
-            assets/**
             dependencies-logs/**
-            resources/foo/**
+            tests/**
       - if: steps.next-version.outputs.version != ''
         name: Tag New Version
         run: |
