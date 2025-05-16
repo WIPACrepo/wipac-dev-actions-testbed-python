@@ -173,11 +173,20 @@ jobs:
         # -> uses the most recent git tag for versioning (aka the one made above)
         # -> creates 'dist/' files
 
+      # Grab artifacts created by 'WIPACrepo/wipac-dev-py-dependencies-action'
+      - if: steps.next-version.outputs.version != ''
+        uses: actions/download-artifact@v4
+        with:
+          name: py-dependency-logs
+          path: pydep-release-assets/
+
       # GitHub Release
       - if: steps.next-version.outputs.version != ''
         uses: softprops/action-gh-release@v2
         with:
-          files: dist/*
+          files: |
+            dist/*
+            pydep-release-assets/**/*
           tag_name: v${{ steps.next-version.outputs.version }}  # must match git tag above
           generate_release_notes: true
 
