@@ -95,7 +95,7 @@ jobs:
         #        if: needs.writable-branch-detect.outputs.OKAY == 'true'
         with:
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-          ref: ${{ github.ref }}  # don't lock to 'sha' b/c action needs to push
+          ref: ${{ github.ref }}  # dont lock to sha (action needs to push)
       - uses: WIPACrepo/wipac-dev-py-setup-action@v5.0
         #        if: needs.writable-branch-detect.outputs.OKAY == 'true'
         with:
@@ -114,11 +114,9 @@ jobs:
         #        if: needs.writable-branch-detect.outputs.OKAY == 'true'
         with:
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-          ref: ${{ github.ref }}  # don't lock to 'sha' b/c action needs to push
-      - uses: WIPACrepo/wipac-dev-py-dependencies-action@v2.1
+          ref: ${{ github.ref }}  # dont lock to sha (action needs to push)
+      - uses: WIPACrepo/wipac-dev-py-dependencies-action@prints-and-releases-only
         #        if: needs.writable-branch-detect.outputs.OKAY == 'true'
-        with:
-          use_directory: true
 
 
   ############################################################################
@@ -175,11 +173,20 @@ jobs:
         # -> uses the most recent git tag for versioning (aka the one made above)
         # -> creates 'dist/' files
 
+      # Grab artifacts created by 'WIPACrepo/wipac-dev-py-dependencies-action'
+      - if: steps.next-version.outputs.version != ''
+        uses: actions/download-artifact@v4
+        with:
+          name: py-dependency-logs
+          path: pydep-release-assets/
+
       # GitHub Release
       - if: steps.next-version.outputs.version != ''
         uses: softprops/action-gh-release@v2
         with:
-          files: dist/*
+          files: |
+            dist/*
+            pydep-release-assets/**/*
           tag_name: v${{ steps.next-version.outputs.version }}  # must match git tag above
           generate_release_notes: true
 
