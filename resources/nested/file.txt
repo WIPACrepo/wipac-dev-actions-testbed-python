@@ -13,3 +13,4 @@ hello uranus
 hello neptune
 hello pluto
 hello mercury
+hello sun
