@@ -95,7 +95,7 @@ jobs:
         #        if: needs.writable-branch-detect.outputs.OKAY == 'true'
         with:
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-          ref: ${{ github.ref }}  # don't lock to 'sha' b/c action needs to push
+          ref: ${{ github.ref }}  # dont lock to sha (action needs to push)
       - uses: WIPACrepo/wipac-dev-py-setup-action@v5.0
         #        if: needs.writable-branch-detect.outputs.OKAY == 'true'
         with:
@@ -114,11 +114,9 @@ jobs:
         #        if: needs.writable-branch-detect.outputs.OKAY == 'true'
         with:
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
-          ref: ${{ github.ref }}  # don't lock to 'sha' b/c action needs to push
-      - uses: WIPACrepo/wipac-dev-py-dependencies-action@v2.1
+          ref: ${{ github.ref }}  # dont lock to sha (action needs to push)
+      - uses: WIPACrepo/wipac-dev-py-dependencies-action@testing-dep-logs
         #        if: needs.writable-branch-detect.outputs.OKAY == 'true'
-        with:
-          use_directory: true
 
 
   ############################################################################
