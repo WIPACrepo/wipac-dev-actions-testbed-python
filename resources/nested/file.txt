@@ -15,3 +15,4 @@ hello pluto
 hello mercury
 hello sun
 hello andromeda
+hello proxima centauri
