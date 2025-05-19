@@ -177,7 +177,7 @@ jobs:
       - if: steps.next-version.outputs.version != ''
         uses: actions/download-artifact@v4
         with:
-          name: py-dependency-logs
+          name: py-dependencies-logs
           path: pydep-release-assets/
 
       # GitHub Release
