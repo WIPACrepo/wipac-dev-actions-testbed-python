@@ -19,3 +19,4 @@ hello proxima centauri
 hello ceres
 hello enceladus
 hello io
+hello betelgeuse
