@@ -115,7 +115,7 @@ jobs:
         with:
           token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
           ref: ${{ github.ref }}  # dont lock to sha (action needs to push)
-      - uses: WIPACrepo/wipac-dev-py-dependencies-action@prints-and-releases-only
+      - uses: WIPACrepo/wipac-dev-py-dependencies-action@v3.0
         #        if: needs.writable-branch-detect.outputs.OKAY == 'true'
 
 
