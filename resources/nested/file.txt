@@ -26,3 +26,4 @@ hello phobos
 hello deimos
 hello risa
 hello rigel
+hello bajor
