@@ -108,7 +108,6 @@ jobs:
       - mypy
       - py-setup
       - py-dependencies
-    concurrency: tag-and-release  # prevent any possible race conditions
     uses: WIPACrepo/wipac-dev-workflows/.github/workflows/tag-and-release.yml@tag-and-release
     with:
       python-version: "${{ fromJSON(needs.py-versions.outputs.matrix)[0] }}"
