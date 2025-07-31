@@ -25,3 +25,4 @@ hello moon
 hello phobos
 hello deimos
 hello risa
+hello rigel
