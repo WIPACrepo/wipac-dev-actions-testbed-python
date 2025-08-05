@@ -31,3 +31,4 @@ hello cardassia
 hello discovery
 hello enterprise
 hello ds9
+hello voyager
