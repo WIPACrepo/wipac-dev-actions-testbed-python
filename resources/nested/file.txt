@@ -28,3 +28,4 @@ hello risa
 hello rigel
 hello bajor
 hello cardassia
+hello discovery
