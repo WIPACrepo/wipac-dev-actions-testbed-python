@@ -91,7 +91,7 @@ jobs:
           ref: ${{ github.ref }}  # dont lock to sha (action needs to push)
           fetch-depth: 0  # setuptools-scm needs to access git tags
 
-      - uses: WIPACrepo/wipac-dev-py-dependencies-action@v3.0
+      - uses: WIPACrepo/wipac-dev-py-dependencies-action@v3.4
 
 
   ############################################################################
